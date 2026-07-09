@@ -396,8 +396,13 @@ def generar_word_asis():
         doc.save(out_docx_completo)
         print(f"[¡ÉXITO DOCX UNIFICADO CON REFERENCIAS ACADÉMICAS EN TODAS LAS TABLAS Y GRÁFICOS!] Guardado en:\n -> {out_docx_completo}")
     except PermissionError:
+        print(f"[¡NOTA IMPORTANTE!] {os.path.basename(out_docx_completo)} estaba abierto en tu Microsoft Word.")
+
+    try:
         doc.save(out_docx_actualizado)
-        print(f"[¡NOTA IMPORTANTE!] {os.path.basename(out_docx_completo)} estaba abierto en tu Microsoft Word, así que guardamos la nueva versión con el mapa corregido y todas las coordenadas verificadas como:\n -> {out_docx_actualizado}\n y también en la carpeta salidas/.")
+        print(f" -> Guardado en: {out_docx_actualizado}")
+    except Exception as e:
+        print(f" [Nota] No se pudo guardar ACTUALIZADO: {e}")
 
     try:
         doc.save(out_docx)

@@ -38,14 +38,16 @@ def generar_tablero_self_contained():
     b64_logo = get_base64_file(logo_path)
     print(f" -> Logo municipal convertido a Base64 (longitud: {len(b64_logo)} caracteres)")
 
-    # 3. Convertir el archivo Word COMPLETO a Base64 para que la descarga sea 100% infalible vía Blob en móviles y PC
-    docx_path = os.path.join(base_dir, 'informe_situacion_salud_tres_de_febrero_ACTUALIZADO.docx')
-    if not os.path.exists(docx_path):
-        docx_path = os.path.join(salidas_dir, 'informe_situacion_salud_tres_de_febrero_COMPLETO.docx')
-    if not os.path.exists(docx_path):
-        docx_path = os.path.join(base_dir, 'informe_situacion_salud_tres_de_febrero_COMPLETO.docx')
-    if not os.path.exists(docx_path):
-        docx_path = os.path.join(base_dir, 'informe_situacion_salud_tres_de_febrero.docx')
+    # 3. Convertir el archivo Word COMPLETO más reciente a Base64 para que la descarga sea 100% infalible vía Blob en móviles y PC
+    docx_candidatos = [
+        os.path.join(base_dir, 'informe_situacion_salud_tres_de_febrero_COMPLETO.docx'),
+        os.path.join(base_dir, 'informe_situacion_salud_tres_de_febrero_ACTUALIZADO.docx'),
+        os.path.join(salidas_dir, 'informe_situacion_salud_tres_de_febrero_COMPLETO.docx'),
+        os.path.join(base_dir, 'informe_situacion_salud_tres_de_febrero.docx')
+    ]
+    docx_validos = [f for f in docx_candidatos if os.path.exists(f)]
+    docx_path = max(docx_validos, key=os.path.getmtime) if docx_validos else docx_candidatos[0]
+    print(f" -> Incrustando documento Word más reciente: {os.path.basename(docx_path)}")
     b64_docx = get_base64_file(docx_path)
     print(f" -> Archivo Word convertido a Base64 para descarga directa en móvil/PC (longitud: {len(b64_docx)} caracteres)")
 
