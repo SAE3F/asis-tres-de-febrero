@@ -780,6 +780,68 @@ def generar_tablero_self_contained():
                     </div>
                 </div>
             </div>
+
+            <!-- SECCIÓN NUEVA: PERFIL EPIDEMIOLÓGICO, ENCUESTAS Y CAUSAS DE MORBI-MORTALIDAD -->
+            <h2 style="font-size: 20px; font-weight: 700; color: var(--azul-primario); margin: 32px 0 16px 0; border-top: 2px dashed var(--neutro-300); padding-top: 28px;">
+                🧬 Perfil Epidemiológico Distrital, Encuestas de Factores de Riesgo (ENFR/UNTREF) y Morbilidad Hospitalaria
+            </h2>
+            <p class="desc" style="margin-bottom: 20px;">
+                Diagnóstico sociosanitario ampliado a partir de encuestas nacionales biofísicas coordinadas en la región, egresos hospitalarios oficiales y relevamientos cualitativos interhospitalarios:
+            </p>
+
+            <div class="grid-2" style="margin-bottom: 24px;">
+                <div class="card-panel" style="border-top: 4px solid var(--naranja);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">🔬</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--naranja-oscuro); margin: 0;">4ª Encuesta Nacional de Factores de Riesgo (ENFR / UNTREF)</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        La <strong>Universidad Nacional de Tres de Febrero (UNTREF)</strong> coordinó la medición física y bioquímico-clínica en el Conurbano para la 4ª ENFR. Los hallazgos en la subregión indican una altísima prevalencia de Enfermedades Crónicas No Transmisibles (ECNT): <strong>>60% presenta sobrepeso u obesidad</strong>, el <strong>34,6% hipertensión arterial</strong> y un marcado sedentarismo. Estos datos justifican científicamente los dispositivos de actividad física y tamizaje distrital en <strong>Plazas Saludables</strong>.
+                    </p>
+                    <div class="fuente-dato" style="margin-top: 12px; font-size: 11px;">
+                        <strong>Fuente:</strong> INDEC, Ministerio de Salud de la Nación y Universidad Nacional de Tres de Febrero (UNTREF).
+                    </div>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid var(--rojo);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">🏥</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--rojo); margin: 0;">Egresos Hospitalarios y Principales Causas de Morbilidad</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Los registros oficiales de egresos en efectores públicos distritales (Hospitales Bocalandro, Carrillo y red ambulatoria) muestran las 3 causas líderes de morbilidad grave: <strong>1º Enfermedades del Sistema Circulatorio</strong> (cardiopatías y ACV, #1 en mortalidad), <strong>2º Enfermedades del Sistema Respiratorio</strong> (neumonías/IRAB invernales en radios con NBI del norte) y <strong>3º Causas Externas y Accidentología Vial</strong> en accesos rápidos distritales (ex Ruta 8, Gral. Paz, Buen Ayre).
+                    </p>
+                    <div class="fuente-dato" style="margin-top: 12px; font-size: 11px;">
+                        <strong>Fuente:</strong> Dirección de Estadísticas e Información en Salud (DEIS) y Dirección de Información en Salud PBA.
+                    </div>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid var(--azul-primario);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">👥</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--azul-primario); margin: 0;">Diagnósticos ASIS Situados (Residencias FAMG / CAPS)</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Estudios microterritoriales de las Residencias de Medicina General en áreas de influencia comunitaria (ej. CAPS 6 Caseros / Barrio El Mercado y Bocalandro) alertan sobre la <strong>polimedicalización en adultos mayores (20,8% previsional)</strong> y necesidades críticas en <strong>salud mental adolescente, orientación sexual y prevención de ITS</strong> en establecimientos educativos del municipio.
+                    </p>
+                    <div class="fuente-dato" style="margin-top: 12px; font-size: 11px;">
+                        <strong>Fuente:</strong> Federación Argentina de Medicina General (FAMG) e informes de residencias interhospitalarias en CAPS.
+                    </div>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid var(--verde);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">👶</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--verde); margin: 0;">Mortalidad Infantil (TMI) y Vigilancia Epidemiológica</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        La TMI en el partido mantiene una evolución descendente favorable (promedio actual <strong>7,1‰</strong>), por debajo de la media del Conurbano. Este logro se fundamenta en la captación precoz en los 13 CAPS y la capacidad resolutiva perinatal del <strong>Hospital Provincial Carrillo (~1.000 partos/año)</strong>. El reto prioritario se centra en reducir el componente neonatal (prematurez) mediante la vacunación de embarazadas y controles estables.
+                    </p>
+                    <div class="fuente-dato" style="margin-top: 12px; font-size: 11px;">
+                        <strong>Fuente:</strong> DEIS (Ministerio de Salud de la Nación) y Observatorio del Conurbano Bonaerense (UNGS).
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- PESTAÑA 2: CARTOGRAFÍA SIG INTERACTIVA -->
