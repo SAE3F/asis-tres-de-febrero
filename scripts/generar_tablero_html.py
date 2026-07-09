@@ -1013,7 +1013,6 @@ def generar_tablero_self_contained():
                 <div class="efector-card naranja" style="padding: 16px;"><h4 style="font-size: 14px; color: var(--naranja-oscuro);">CAPS 12 (Prioridad 1) • Pablo Podestá</h4><p class="loc" style="margin: 0;">Firpo y San Martín</p></div>
                 <div class="efector-card naranja" style="padding: 16px;"><h4 style="font-size: 14px; color: var(--naranja-oscuro);">CAPS 13 (Prioridad 1) • Churruca</h4><p class="loc" style="margin: 0;">Iguazú y Salta</p></div>
             </div>
-            </div>
 
             <!-- SECCIÓN NUEVA: CAMPAÑAS SANITARIAS, PROGRAMAS MUNICIPALES Y CANALES DIGITALES DE ATENCIÓN -->
             <h2 style="font-size: 20px; font-weight: 700; color: var(--azul-primario); margin: 36px 0 16px 0; border-top: 2px dashed var(--neutro-300); padding-top: 28px;">
