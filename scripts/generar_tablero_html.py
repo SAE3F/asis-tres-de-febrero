@@ -951,8 +951,80 @@ def generar_tablero_self_contained():
                 <div class="efector-card naranja" style="padding: 16px;"><h4 style="font-size: 14px; color: var(--naranja-oscuro);">CAPS 12 (Prioridad 1) • Pablo Podestá</h4><p class="loc" style="margin: 0;">Firpo y San Martín</p></div>
                 <div class="efector-card naranja" style="padding: 16px;"><h4 style="font-size: 14px; color: var(--naranja-oscuro);">CAPS 13 (Prioridad 1) • Churruca</h4><p class="loc" style="margin: 0;">Iguazú y Salta</p></div>
             </div>
+            </div>
+
+            <!-- SECCIÓN NUEVA: CAMPAÑAS SANITARIAS, PROGRAMAS MUNICIPALES Y CANALES DIGITALES DE ATENCIÓN -->
+            <h2 style="font-size: 20px; font-weight: 700; color: var(--azul-primario); margin: 36px 0 16px 0; border-top: 2px dashed var(--neutro-300); padding-top: 28px;">
+                📢 Campañas Sanitarias, Programas Municipales y Canales de Atención Distrital
+            </h2>
+            <p class="desc" style="margin-bottom: 20px;">
+                Estrategias de atención primaria, prevención epidemiológica y autogestión ciudadana implementadas activamente por la <strong>Secretaría de Salud y Gestión Operativa</strong> del Municipio de Tres de Febrero (disponibles en <a href="https://www.tresdefebrero.gov.ar/salud/" target="_blank" style="color: var(--azul-primario); font-weight: 700;">tresdefebrero.gov.ar/salud</a>):
+            </p>
+
+            <div class="grid-2" style="margin-bottom: 24px;">
+                <div class="card-panel" style="border-top: 4px solid var(--azul-primario);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">📲</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--azul-primario); margin: 0;">Portal Autogestión de Turnos (Mi3F) & Telemedicina</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Plataforma digital para la reserva de turnos protegidos en especialidades y medicina general en los 13 CAPS municipales (<a href="https://turnos.tresdefebrero.gob.ar/home" target="_blank" style="color: var(--naranja-oscuro); font-weight: 600;">Mi3F / turnos.tresdefebrero.gob.ar</a>). Se complementa con consultorios virtuales de <strong>Telemedicina</strong> para resolver demandas de baja complejidad sin desplazamientos físicos y un Call Center distrital continuo.
+                    </p>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid var(--rojo);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">🚑</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--rojo); margin: 0;">SAME Tres de Febrero (107 Municipal) & SIES</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Sistema de Atención Médica de Emergencias prehospitalario propio, con despacho permanente a través del número <strong>107</strong>. Cuenta con unidades de terapia intensiva móvil (UTIM) georreferenciadas que trabajan en red con las guardias de agudos provinciales y la Base SIES R7 del Hospital Carrillo.
+                    </p>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid var(--verde);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">💉</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--verde); margin: 0;">Campañas de Vacunación Integral (#YoPongoElBrazo)</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Estrategia continua de inmunización comunitaria (<a href="https://www.tresdefebrero.gov.ar/yopongoelbrazo/" target="_blank" style="color: var(--verde); font-weight: 600;">#YoPongoElBrazo</a>) aplicada en los 13 CAPS y rondas móviles. Incluye el <strong>Esquema de Calendario Nacional</strong>, la dosis extra de <strong>Vacuna Triple Viral</strong> (Sarampión, Rubéola, Paperas), vacunación prioritaria para embarazadas (VRS, Triple Bacteriana Acelular, Antigripal) y prevención contra Hepatitis B/C y Tuberculosis.
+                    </p>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid var(--naranja);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">🏃</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--naranja-oscuro); margin: 0;">3F Cuida tu Salud & Plazas Saludables</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Programa distrital descentralizado en parques y plazas de las distintas localidades (<a href="https://www.tresdefebrero.gov.ar/3fcuidatusalud/" target="_blank" style="color: var(--naranja-oscuro); font-weight: 600;">3F Cuida tu Salud</a> / <a href="https://www.tresdefebrero.gov.ar/salud/plazassaludables/" target="_blank" style="color: var(--naranja-oscuro); font-weight: 600;">Plazas Saludables</a>). Ofrece controles clínicos espontáneos de tensión arterial, glucemia, peso, índice de masa corporal (IMC) y consejería nutricional activa para frenar enfermedades crónicas no transmisibles.
+                    </p>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid var(--azul-info);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">🦟</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--azul-info); margin: 0;">Vigilancia Arbovirosis (Dengue) & Zoonosis</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Plan integral de lucha contra el vector del <strong>Dengue, Zika y Chikungunya</strong> (<a href="https://www.tresdefebrero.gov.ar/dengue/" target="_blank" style="color: var(--azul-info); font-weight: 600;">Vigilancia y Descacharrado</a>) con fumigación territorial y operativos de control de foco. Se integra con las campañas gratuitas de <strong>Zoonosis ("Mascotas de 3F")</strong> para vacunación antirrábica y esterilización quirúrgica itinerante.
+                    </p>
+                </div>
+
+                <div class="card-panel" style="border-top: 4px solid #6b21a8;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 20px;">🩺</span>
+                        <h4 style="font-size: 16px; font-weight: 700; color: #6b21a8; margin: 0;">Prevención de Enfermedades Crónicas y Tamizaje Especializado</h4>
+                    </div>
+                    <p class="desc" style="margin-bottom: 8px;">
+                        Atención gratuita e integral para pacientes diabéticos (<strong>PRODIABA</strong> con provisión virtual continua de insumos y fármacos), tamizaje temprano del cáncer de cuello uterino (PAP y Test de VPH en todos los CAPS), talleres de salud integral para adolescentes en establecimientos educativos, y diagnóstico odontológico digitalizado mediante <strong>Pantomógrafo de Alta Complejidad</strong> en el Hospital Di Próspero.
+                    </p>
+                </div>
+            </div>
+
             <div class="fuente-dato" style="margin-top: 24px;">
-                <strong>Fuente del Directorio de Red Sanitaria:</strong> Sistema Integrado de Información Sanitaria Argentino (SISA - Ministerio de Salud de la Nación), Registro Federal de Establecimientos de Salud (Refes), Dirección de Hospitales de Región Sanitaria VII (PBA) y Catálogo Georreferenciado de Efectores de la Secretaría de Salud y Gestión Operativa de la Municipalidad de Tres de Febrero (2026).
+                <strong>Fuente del Directorio de Red Sanitaria y Programas:</strong> Sistema Integrado de Información Sanitaria Argentino (SISA - Ministerio de Salud de la Nación), Registro Federal de Establecimientos de Salud (Refes), Dirección de Hospitales de Región Sanitaria VII (PBA) y Portal Oficial de la Secretaría de Salud y Gestión Operativa de la Municipalidad de Tres de Febrero (2026 - <a href="https://www.tresdefebrero.gov.ar/salud/" target="_blank">tresdefebrero.gov.ar/salud</a>).
             </div>
         </div>
 
