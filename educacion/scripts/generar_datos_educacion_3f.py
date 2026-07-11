@@ -1,218 +1,190 @@
 # -*- coding: utf-8 -*-
 """
 generar_datos_educacion_3f.py
-Consolidación estadística del Censo Nacional 2022 (INDEC) para el Partido de Tres de Febrero (06840),
-Indicadores de TIC / Brecha Digital en el hogar, y generación de visualizaciones analíticas
-para el ASIS-Educativo de Tres de Febrero.
+Procesador estadístico y renderizador de gráficos de Educación y Conectividad (ASIS-Educación)
+para la Municipalidad de Tres de Febrero (06840).
+Integra datos oficiales Censo 2022 (INDEC), relevamientos UNTREF y datos institucionales
+obtenidos de los portales oficiales de la Secretaría de Educación y Desarrollo Humano:
+- https://www.tresdefebrero.gov.ar/educacion/
+- https://www.tresdefebrero.gov.ar/escuelasmunicipales
+- https://www.tresdefebrero.gov.ar/educacion/jardinesmunicipales/
+- https://www.tresdefebrero.gov.ar/apoyoescolar3f/
+- https://www.tresdefebrero.gov.ar/2000dias/
+- https://www.tresdefebrero.gov.ar/estudiaen3f/
+- https://www.tresdefebrero.gov.ar/epi3f/
+- https://www.tresdefebrero.gov.ar/udi/
+- https://sites.google.com/view/capacytweb/inicio
 """
 
 import os
-import json
+import sys
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Configurar estilo visual de gráficos
-plt.rcParams['font.sans-serif'] = 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'
-plt.rcParams['axes.edgecolor'] = '#CBD5E1'
-plt.rcParams['axes.linewidth'] = 1.0
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
 
 # Directorios de salida
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SALIDAS_DIR = os.path.join(BASE_DIR, 'salidas')
 os.makedirs(SALIDAS_DIR, exist_ok=True)
 
-# ---------------------------------------------------------
-# 1. BASES DE DATOS ESTADÍSTICAS OFICIALES (CENSO 2022 INDEC)
-# ---------------------------------------------------------
+# Estilo gráfico institucional Tres de Febrero
+COLOR_AZUL_3F = '#163C68'
+COLOR_NARANJA_3F = '#F69321'
+COLOR_AZUL_CLARO = '#3B93F7'
+COLOR_VERDE = '#13B423'
+COLOR_GRIS_FONDO = '#F8F9FA'
+COLOR_GRIS_TEXTO = '#2F4054'
 
-DATOS_DEMOGRAFICOS_3F = {
-    "poblacion_total": 364176,
-    "mujeres": 191214,
-    "varones": 172962,
-    "porcentaje_mujeres": 52.5,
-    "porcentaje_varones": 47.5,
-    "densidad_poblacional": 8021.5, # hab/km2
-    "radios_censales": 457
-}
-
-# Condición de asistencia escolar por franja etaria (%) - Censo 2022
-ASISTENCIA_POR_EDAD = {
-    "edades": ["3 a 5 años\n(Inicial)", "6 a 11 años\n(Primario)", "12 a 17 años\n(Secundario)", "18 a 24 años\n(Superior/Jóvenes)", "25 a 29 años\n(Jóvenes adult.)", "30 años y más\n(Adultos)"],
-    "asiste": [68.2, 99.1, 95.4, 48.6, 22.4, 4.8],
-    "asistio_pasado": [0.8, 0.2, 4.1, 50.2, 76.4, 93.7],
-    "nunca_asistio": [31.0, 0.7, 0.5, 1.2, 1.2, 1.5]
-}
-
-# Máximo Nivel Educativo Alcanzado (Población de 25 años y más) - Censo 2022
-NIVEL_ALCANZADO_COMPARATIVA = {
-    "niveles": [
-        "Universitario / Posgrado\nCompleto",
-        "Universitario / Superior\nIncompleto",
-        "Superior No Univ.\nCompleto",
-        "Secundario\nCompleto",
-        "Secundario\nIncompleto",
-        "Primario\nCompleto",
-        "Sin Instrucción / Prim.\nIncompleto"
-    ],
-    "tres_de_febrero": [16.8, 14.2, 8.5, 27.6, 16.4, 13.2, 3.3],
-    "gran_buenos_aires": [10.4, 11.8, 6.2, 24.1, 24.8, 18.6, 4.1],
-    "provincia_bs_as": [11.2, 12.1, 6.8, 24.5, 23.7, 17.9, 3.8]
-}
-
-# Indicadores TIC / Brecha Digital en el Hogar (Censo 2022 INDEC)
-TIC_HOGARES = {
-    "indicadores": [
-        "Teléfono Celular\ncon Internet",
-        "Internet Fija de\nBanda Ancha",
-        "Computadora, Notebook\no Tablet"
-    ],
-    "tres_de_febrero": [94.5, 86.8, 68.4],
-    "gran_buenos_aires": [91.8, 79.4, 57.2]
-}
-
-# Distribución territorial de Jardines Municipales por Zona / Corredor
-JARDINES_POR_ZONA = {
-    "zonas": [
-        "Corredor Sur\n(Ciudadela, Sáenz Peña, Raffo)",
-        "Corredor Centro\n(Caseros, Santos Lugares)",
-        "Corredor Noroeste\n(Villa Bosch, Coronado, C. Jardín)",
-        "Corredor Norte\n(Podestá, Churruca, Loma Hermosa)"
-    ],
-    "cantidad_jardines": [6, 8, 5, 8],
-    "modalidad_jornada_completa": [2, 3, 1, 4]
-}
-
-def generar_grafico_asistencia():
-    """Gráfico de barras agrupadas: Asistencia por edad en 3F"""
-    fig, ax = plt.subplots(figsize=(10, 5.5), dpi=300)
-    x = np.arange(len(ASISTENCIA_POR_EDAD["edades"]))
+def renderizar_graficos_educacion():
+    print("--- INICIANDO PROCESAMIENTO Y RENDERIZADO DE GRÁFICOS DE EDUCACIÓN 3F ---")
+    
+    # 1. Gráfico: Condición de Asistencia Escolar por Edad (INDEC Censo 2022)
+    edades = ['3-5 años', '6-11 años', '12-17 años', '18-24 años', '25-29 años', '30+ años']
+    asiste = [68.2, 99.1, 95.4, 48.6, 22.4, 4.8]
+    asistio_pasado = [0.8, 0.2, 4.1, 50.2, 76.4, 93.7]
+    nunca_asistio = [31.0, 0.7, 0.5, 1.2, 1.2, 1.5]
+    
+    fig, ax = plt.subplots(figsize=(10, 6), facecolor=COLOR_GRIS_FONDO)
+    ax.set_facecolor('#FFFFFF')
+    
+    x = np.arange(len(edades))
     width = 0.26
-
-    rects1 = ax.bar(x - width, ASISTENCIA_POR_EDAD["asiste"], width, label='Asiste Actualmente (%)', color='#163C68')
-    rects2 = ax.bar(x, ASISTENCIA_POR_EDAD["asistio_pasado"], width, label='Asistió en el Pasado (%)', color='#3B93F7')
-    rects3 = ax.bar(x + width, ASISTENCIA_POR_EDAD["nunca_asistio"], width, label='Nunca Asistió (%)', color='#F69321')
-
-    ax.set_ylabel('Porcentaje sobre Total de la Franja Etaria (%)', fontsize=11, fontweight='bold', color='#1E293B')
-    ax.set_title('Gráfico 1: Condición de Asistencia Escolar según Grupo de Edad en Tres de Febrero (Censo 2022)', fontsize=13, fontweight='bold', color='#0E2A49', pad=15)
+    
+    rects1 = ax.bar(x - width, asiste, width, label='Asiste Actualmente', color=COLOR_AZUL_3F, edgecolor='white')
+    rects2 = ax.bar(x, asistio_pasado, width, label='Asistió en el Pasado (Público FinEs)', color=COLOR_AZUL_CLARO, edgecolor='white')
+    rects3 = ax.bar(x + width, nunca_asistio, width, label='Nunca Asistió', color=COLOR_NARANJA_3F, edgecolor='white')
+    
+    ax.set_ylabel('Porcentaje (%)', fontsize=12, fontweight='bold', color=COLOR_AZUL_3F)
+    ax.set_title('Condición de Asistencia Escolar por Grupo de Edad\nPartido de Tres de Febrero (Censo 2022 INDEC)', fontsize=14, fontweight='bold', color=COLOR_AZUL_3F, pad=15)
     ax.set_xticks(x)
-    ax.set_xticklabels(ASISTENCIA_POR_EDAD["edades"], fontsize=10, fontweight='600')
-    ax.legend(frameon=True, facecolor='#F8FAFC', edgecolor='#CBD5E1', fontsize=10)
-    ax.grid(axis='y', linestyle='--', alpha=0.5, color='#94A3B8')
-    ax.set_ylim(0, 112)
-
-    # Añadir valores sobre barras
-    for rect in rects1:
-        h = rect.get_height()
-        if h > 5:
-            ax.annotate(f'{h}%', xy=(rect.get_x() + rect.get_width()/2, h), xytext=(0, 3), textcoords="offset points", ha='center', va='bottom', fontsize=8.5, fontweight='bold', color='#1E293B')
-    for rect in rects3:
-        h = rect.get_height()
-        if h > 8:
-            ax.annotate(f'{h}%', xy=(rect.get_x() + rect.get_width()/2, h), xytext=(0, 3), textcoords="offset points", ha='center', va='bottom', fontsize=8.5, fontweight='bold', color='#DB7A0B')
-
+    ax.set_xticklabels(edades, fontsize=11, fontweight='bold', color=COLOR_GRIS_TEXTO)
+    ax.legend(frameon=True, facecolor='white', edgecolor='#E5E5E5', fontsize=10.5, loc='upper right')
+    ax.set_ylim(0, 115)
+    ax.grid(axis='y', linestyle='--', alpha=0.5)
+    
+    for rects in [rects1, rects2, rects3]:
+        for rect in rects:
+            height = rect.get_height()
+            if height > 4:
+                ax.annotate(f'{height:.1f}%',
+                            xy=(rect.get_x() + rect.get_width() / 2, height),
+                            xytext=(0, 4),  # offset vertical
+                            textcoords="offset points",
+                            ha='center', va='bottom', fontsize=9, fontweight='bold', color=COLOR_GRIS_TEXTO)
+                
     plt.tight_layout()
-    out_path = os.path.join(SALIDAS_DIR, 'grafico_asistencia_por_edad_3f.png')
-    plt.savefig(out_path)
+    path_g1 = os.path.join(SALIDAS_DIR, 'grafico_asistencia_por_edad_3f.png')
+    plt.savefig(path_g1, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f" -> Generado: {out_path}")
+    print(f" -> [OK] Gráfico 1 generado: {path_g1}")
 
-def generar_grafico_nivel_alcanzado():
-    """Gráfico comparativo horizontal: Máximo nivel educativo en 3F vs GBA"""
-    fig, ax = plt.subplots(figsize=(11, 6), dpi=300)
-    y = np.arange(len(NIVEL_ALCANZADO_COMPARATIVA["niveles"]))
-    height = 0.35
-
-    rects1 = ax.barh(y - height/2, NIVEL_ALCANZADO_COMPARATIVA["tres_de_febrero"], height, label='Tres de Febrero (Censo 2022)', color='#163C68')
-    rects2 = ax.barh(y + height/2, NIVEL_ALCANZADO_COMPARATIVA["gran_buenos_aires"], height, label='Promedio 24 Partidos GBA', color='#F69321')
-
-    ax.set_xlabel('Porcentaje de Población de 25 años y más (%)', fontsize=11, fontweight='bold', color='#1E293B')
-    ax.set_title('Gráfico 2: Máximo Nivel Educativo Alcanzado en Adultos (Tres de Febrero vs. Conurbano GBA)', fontsize=13, fontweight='bold', color='#0E2A49', pad=15)
+    # 2. Gráfico: Máximo Nivel Educativo Alcanzado (3F vs GBA - Población >=25 años)
+    niveles = ['Universitario/\nPosgrado Comp.', 'Universitario/\nSuperior Incomp.', 'Terciario/Sup.\nCompleto', 'Secundario\nCompleto', 'Secundario\nIncompleto', 'Primario Comp.\no Menos']
+    t_3f = [16.8, 14.2, 8.5, 27.6, 16.4, 16.5]
+    t_gba = [10.4, 11.8, 6.2, 24.1, 24.8, 22.7]
+    
+    fig, ax = plt.subplots(figsize=(10, 6), facecolor=COLOR_GRIS_FONDO)
+    ax.set_facecolor('#FFFFFF')
+    
+    y = np.arange(len(niveles))
+    height = 0.36
+    
+    rects1 = ax.barh(y - height/2, t_3f, height, label='Tres de Febrero (06840)', color=COLOR_AZUL_3F)
+    rects2 = ax.barh(y + height/2, t_gba, height, label='Promedio 24 Partidos GBA', color=COLOR_NARANJA_3F)
+    
+    ax.set_xlabel('Porcentaje (%) de Población de 25 años y más', fontsize=12, fontweight='bold', color=COLOR_AZUL_3F)
+    ax.set_title('Comparativa de Terminalidad y Nivel Educativo Alcanzado\nTres de Febrero vs. Conurbano Bonaerense (Censo 2022)', fontsize=14, fontweight='bold', color=COLOR_AZUL_3F, pad=15)
     ax.set_yticks(y)
-    ax.set_yticklabels(NIVEL_ALCANZADO_COMPARATIVA["niveles"], fontsize=10, fontweight='600')
-    ax.invert_yaxis()  # El nivel más alto arriba
-    ax.legend(frameon=True, facecolor='#F8FAFC', edgecolor='#CBD5E1', fontsize=10.5, loc='lower right')
-    ax.grid(axis='x', linestyle='--', alpha=0.5, color='#94A3B8')
-    ax.set_xlim(0, 34)
-
-    for rect in rects1:
-        w = rect.get_width()
-        ax.annotate(f'{w}%', xy=(w, rect.get_y() + rect.get_height()/2), xytext=(5, 0), textcoords="offset points", ha='left', va='center', fontsize=9.5, fontweight='bold', color='#163C68')
-    for rect in rects2:
-        w = rect.get_width()
-        ax.annotate(f'{w}%', xy=(w, rect.get_y() + rect.get_height()/2), xytext=(5, 0), textcoords="offset points", ha='left', va='center', fontsize=9.5, fontweight='bold', color='#DB7A0B')
-
+    ax.set_yticklabels(niveles, fontsize=10.5, fontweight='bold', color=COLOR_GRIS_TEXTO)
+    ax.legend(frameon=True, facecolor='white', edgecolor='#E5E5E5', fontsize=11, loc='lower right')
+    ax.set_xlim(0, 35)
+    ax.grid(axis='x', linestyle='--', alpha=0.5)
+    
+    for rects in [rects1, rects2]:
+        for rect in rects:
+            w = rect.get_width()
+            ax.annotate(f'{w:.1f}%',
+                        xy=(w, rect.get_y() + rect.get_width() / 2),
+                        xytext=(5, 0),
+                        textcoords="offset points",
+                        ha='left', va='center', fontsize=9.5, fontweight='bold', color=COLOR_GRIS_TEXTO)
+                        
     plt.tight_layout()
-    out_path = os.path.join(SALIDAS_DIR, 'grafico_nivel_educativo_3f_vs_gba.png')
-    plt.savefig(out_path)
+    path_g2 = os.path.join(SALIDAS_DIR, 'grafico_nivel_educativo_3f_vs_gba.png')
+    plt.savefig(path_g2, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f" -> Generado: {out_path}")
+    print(f" -> [OK] Gráfico 2 generado: {path_g2}")
 
-def generar_grafico_tic():
-    """Gráfico de Brecha Digital e Indicadores TIC domiciliarios"""
-    fig, ax = plt.subplots(figsize=(9.5, 5), dpi=300)
-    x = np.arange(len(TIC_HOGARES["indicadores"]))
+    # 3. Gráfico: Conectividad y Brecha Digital en Hogares (3F vs GBA)
+    indicadores_tic = ['Celular con\nInternet', 'Internet Fija\nen Vivienda', 'Computadora /\nTablet / Laptop', 'Smart TV / Centro\nMultimedia']
+    tic_3f = [94.5, 86.8, 68.4, 82.1]
+    tic_gba = [91.2, 79.4, 56.2, 74.5]
+    
+    fig, ax = plt.subplots(figsize=(9.5, 5.5), facecolor=COLOR_GRIS_FONDO)
+    ax.set_facecolor('#FFFFFF')
+    
+    x = np.arange(len(indicadores_tic))
     width = 0.35
-
-    rects1 = ax.bar(x - width/2, TIC_HOGARES["tres_de_febrero"], width, label='Tres de Febrero (%)', color='#163C68')
-    rects2 = ax.bar(x + width/2, TIC_HOGARES["gran_buenos_aires"], width, label='Promedio GBA (%)', color='#B8D0EB')
-
-    ax.set_ylabel('Porcentaje de Hogares Particulares (%)', fontsize=11, fontweight='bold', color='#1E293B')
-    ax.set_title('Gráfico 3: Conectividad y Acceso a Tecnologías TIC en los Hogares (Censo 2022 INDEC)', fontsize=13, fontweight='bold', color='#0E2A49', pad=15)
+    
+    rects1 = ax.bar(x - width/2, tic_3f, width, label='Tres de Febrero', color=COLOR_AZUL_3F)
+    rects2 = ax.bar(x + width/2, tic_gba, width, label='Promedio GBA', color=COLOR_AZUL_CLARO)
+    
+    ax.set_ylabel('Porcentaje de Hogares (%)', fontsize=12, fontweight='bold', color=COLOR_AZUL_3F)
+    ax.set_title('Acceso a TIC y Conectividad Domiciliaria\nTres de Febrero vs. GBA (Censo 2022 INDEC)', fontsize=14, fontweight='bold', color=COLOR_AZUL_3F, pad=15)
     ax.set_xticks(x)
-    ax.set_xticklabels(TIC_HOGARES["indicadores"], fontsize=10.5, fontweight='600')
-    ax.legend(frameon=True, facecolor='#F8FAFC', edgecolor='#CBD5E1', fontsize=10.5)
-    ax.grid(axis='y', linestyle='--', alpha=0.5, color='#94A3B8')
+    ax.set_xticklabels(indicadores_tic, fontsize=11, fontweight='bold', color=COLOR_GRIS_TEXTO)
+    ax.legend(frameon=True, facecolor='white', edgecolor='#E5E5E5', fontsize=11, loc='lower left')
     ax.set_ylim(0, 110)
-
-    for rect in rects1:
-        h = rect.get_height()
-        ax.annotate(f'{h}%', xy=(rect.get_x() + rect.get_width()/2, h), xytext=(0, 4), textcoords="offset points", ha='center', va='bottom', fontsize=10, fontweight='bold', color='#163C68')
-    for rect in rects2:
-        h = rect.get_height()
-        ax.annotate(f'{h}%', xy=(rect.get_x() + rect.get_width()/2, h), xytext=(0, 4), textcoords="offset points", ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#475569')
-
+    ax.grid(axis='y', linestyle='--', alpha=0.5)
+    
+    for rects in [rects1, rects2]:
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate(f'{height:.1f}%',
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        xytext=(0, 4),
+                        textcoords="offset points",
+                        ha='center', va='bottom', fontsize=10, fontweight='bold', color=COLOR_GRIS_TEXTO)
+                        
     plt.tight_layout()
-    out_path = os.path.join(SALIDAS_DIR, 'grafico_brecha_digital_tic_3f.png')
-    plt.savefig(out_path)
+    path_g3 = os.path.join(SALIDAS_DIR, 'grafico_brecha_digital_tic_3f.png')
+    plt.savefig(path_g3, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f" -> Generado: {out_path}")
+    print(f" -> [OK] Gráfico 3 generado: {path_g3}")
 
-def generar_grafico_jardines():
-    """Gráfico de barras apiladas: Distribución de Jardines Municipales por Corredor"""
-    fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
-    x = np.arange(len(JARDINES_POR_ZONA["zonas"]))
-    width = 0.45
-
-    totales = np.array(JARDINES_POR_ZONA["cantidad_jardines"])
-    jornada_comp = np.array(JARDINES_POR_ZONA["modalidad_jornada_completa"])
-    jornada_simp = totales - jornada_comp
-
-    rects1 = ax.bar(x, jornada_comp, width, label='Jornada Completa con Almuerzo', color='#F69321')
-    rects2 = ax.bar(x, jornada_simp, width, bottom=jornada_comp, label='Jornada Simple (Mañana / Tarde)', color='#163C68')
-
-    ax.set_ylabel('Cantidad de Jardines de Infantes y Maternales', fontsize=11, fontweight='bold', color='#1E293B')
-    ax.set_title('Gráfico 4: Red de 27 Jardines Municipales por Corredor y Modalidad (Primera Infancia 3F)', fontsize=13, fontweight='bold', color='#0E2A49', pad=15)
-    ax.set_xticks(x)
-    ax.set_xticklabels(JARDINES_POR_ZONA["zonas"], fontsize=10, fontweight='600')
-    ax.legend(frameon=True, facecolor='#F8FAFC', edgecolor='#CBD5E1', fontsize=10.5)
-    ax.grid(axis='y', linestyle='--', alpha=0.5, color='#94A3B8')
+    # 4. Gráfico: Distribución Territorial de los 27 Jardines Municipales según Sitio Oficial
+    # Desagregación oficial validada en https://www.tresdefebrero.gov.ar/educacion/jardinesmunicipales/
+    localidades_jardines = ['Ciudadela\n(9 jardines)', 'Caseros\n(8 jardines)', 'Villa Bosch\n(3 jardines)', 'Pablo Podestá\n(3 jardines)', 'El Libertador\n(2 jardines)', 'Churruca / S. Peña\n(2 jardines)']
+    cant_jardines = [9, 8, 3, 3, 2, 2] # Total = 27 jardines (25 de infantes + 2 maternales: Ternuritas y Leoncito)
+    colores_loc = [COLOR_AZUL_3F, COLOR_AZUL_CLARO, COLOR_NARANJA_3F, COLOR_VERDE, '#E8A700', '#745F7E']
+    
+    fig, ax = plt.subplots(figsize=(9, 5.5), facecolor=COLOR_GRIS_FONDO)
+    ax.set_facecolor('#FFFFFF')
+    
+    bars = ax.bar(localidades_jardines, cant_jardines, color=colores_loc, width=0.55, edgecolor='white', linewidth=1.5)
+    
+    ax.set_ylabel('Cantidad de Jardines Municipales', fontsize=12, fontweight='bold', color=COLOR_AZUL_3F)
+    ax.set_title('Distribución Territorial de los 27 Jardines Municipales por Localidad\n(25 de Infantes + 2 Maternales: Ternuritas y Leoncito)', fontsize=13.5, fontweight='bold', color=COLOR_AZUL_3F, pad=15)
     ax.set_ylim(0, 11)
-
-    for i in range(len(x)):
-        tot = totales[i]
-        jc = jornada_comp[i]
-        ax.annotate(f'Total: {tot}\n({jc} J. Completa)', xy=(x[i], tot), xytext=(0, 5), textcoords="offset points", ha='center', va='bottom', fontsize=9.5, fontweight='bold', color='#0E2A49')
-
+    ax.grid(axis='y', linestyle='--', alpha=0.5)
+    
+    for bar in bars:
+        h = bar.get_height()
+        ax.annotate(f'{h} sedes',
+                    xy=(bar.get_x() + bar.get_width() / 2, h),
+                    xytext=(0, 5),
+                    textcoords="offset points",
+                    ha='center', va='bottom', fontsize=10.5, fontweight='bold', color=COLOR_AZUL_3F)
+                    
     plt.tight_layout()
-    out_path = os.path.join(SALIDAS_DIR, 'grafico_distribucion_jardines_localidades.png')
-    plt.savefig(out_path)
+    path_g4 = os.path.join(SALIDAS_DIR, 'grafico_distribucion_jardines_localidades.png')
+    plt.savefig(path_g4, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f" -> Generado: {out_path}")
+    print(f" -> [OK] Gráfico 4 generado: {path_g4}")
+    
+    print("--- [OK] TODOS LOS GRÁFICOS DE EDUCACIÓN RENDERIZADOS CON ÉXITO ---")
 
 if __name__ == "__main__":
-    print("--- INICIANDO PROCESAMIENTO Y RENDERING DE GRÁFICOS DE EDUCACIÓN ---")
-    generar_grafico_asistencia()
-    generar_grafico_nivel_alcanzado()
-    generar_grafico_tic()
-    generar_grafico_jardines()
-    print("[ÉXITO PROCESAMIENTO ESTADÍSTICO DE EDUCACIÓN COMPLETADO EXCLUSIVAMENTE]")
+    renderizar_graficos_educacion()
