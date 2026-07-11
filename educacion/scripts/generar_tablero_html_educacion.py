@@ -331,6 +331,9 @@ def generar_tablero_educacion():
             </div>
         </div>
         <div class="nav-actions">
+            <a href="../index.html" class="btn-naranja" style="background: var(--azul-primario); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                <span>🏥 Ver Tablero de Salud</span>
+            </a>
             <button onclick="descargarWordEducacion()" class="btn-naranja">
                 📥 Descargar Informe ASIS-Educación (.docx)
             </button>

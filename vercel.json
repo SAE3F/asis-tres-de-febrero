@@ -2,9 +2,13 @@
   "name": "asis-tres-de-febrero",
   "version": 2,
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "educacion/index.html", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/educacion/index.html", "dest": "/educacion/index.html" },
+    { "src": "/educacion/?(.*)", "dest": "/educacion/index.html" },
+    { "src": "/salud", "dest": "/index.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

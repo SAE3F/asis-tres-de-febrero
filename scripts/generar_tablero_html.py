@@ -677,6 +677,9 @@ def generar_tablero_self_contained():
             </div>
         </div>
         <div class="nav-actions">
+            <a href="educacion/index.html" class="btn-naranja" style="background: var(--azul-primario); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                <span>🎓 Ver Tablero de Educación</span>
+            </a>
             <button onclick="downloadWordReport()" class="btn-naranja">
                 <span>⬇ Descargar Informe de Situación (Word)</span>
             </button>
